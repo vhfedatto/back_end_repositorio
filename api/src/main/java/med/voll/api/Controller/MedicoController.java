@@ -1,18 +1,26 @@
 package med.voll.api.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import med.voll.api.medico.Medico;
+import med.voll.api.medico.MedicoRepository;
 import med.voll.api.Service.DadosCadastroMedico;
 
 @RestController //Não é mais classe Java -> Quem vai gerenciar agora é o Spring
 @RequestMapping("medicos") //Requisição para "/medicos" ele sabe para onde mandar.
 public class MedicoController {
+    @Autowired
+    private MedicoRepository repository;
     
     @PostMapping
-    public void cadastrar(@RequestBody DadosCadastroMedico dados){
-        
+    @Transactional
+    public void cadastrar(@RequestBody @Valid DadosCadastroMedico dados){
+        repository.save(new Medico(dados));
     }
 }
